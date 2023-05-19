@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import FastAPI, HTTPException
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -26,9 +28,8 @@ async def root():
 
 
 @app.post("/sms")
-async def receive_sms(sms: SMS, auth: Auth):  # , auth: Auth):
-
-    print(sms)
+async def receive_sms(sms: SMS, auth: Auth):
+    logging.info(sms)
     if not sms:
         raise HTTPException(status_code=404, detail="Item not provided")
     if not auth.auth == auth_var:
@@ -46,4 +47,4 @@ async def receive_sms(sms: SMS, auth: Auth):  # , auth: Auth):
 async def list_sms():
     sms = get_all_sms(Session)
 
-    return {"message": sms}
+    return {"smsList": sms}

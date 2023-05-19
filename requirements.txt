@@ -2,3 +2,4 @@ fastapi
 httpx
 sqlalchemy
 pytest
+uvicorn
