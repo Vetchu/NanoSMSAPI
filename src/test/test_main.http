@@ -13,13 +13,16 @@ POST http://127.0.0.1:8000/sms
 Content-Type: application/json
 
 {
-  "sender": "hihiks",
-  "message": "content"
+  "sms": {
+    "sender": "hihiks",
+    "message": "content"
+  },
+  "auth": "oof"
 }
+
 ### Send POST request with json body
 POST http://127.0.0.1:8000/sms
 Content-Type: application/json
 
 {
-
 }
