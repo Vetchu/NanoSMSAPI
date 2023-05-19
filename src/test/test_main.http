@@ -1,0 +1,25 @@
+# Test your FastAPI endpoints
+
+GET http://127.0.0.1:8000/
+Accept: application/json
+
+###
+
+GET http://127.0.0.1:8000/hello/User
+Accept: application/json
+
+### Send POST request with json body
+POST http://127.0.0.1:8000/sms
+Content-Type: application/json
+
+{
+  "sender": "hihiks",
+  "message": "content"
+}
+### Send POST request with json body
+POST http://127.0.0.1:8000/sms
+Content-Type: application/json
+
+{
+
+}
