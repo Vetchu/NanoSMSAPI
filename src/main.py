@@ -1,8 +1,12 @@
 import logging
+import secrets
+from typing import Annotated
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from starlette import status
 
 from src.db.base import Base
 from src.models.auth import Auth
@@ -18,8 +22,29 @@ Session = sessionmaker()
 Session.configure(bind=engine)
 session = Session()
 
-
 # register_exception(app)
+
+security = HTTPBasic()
+
+auth = {"login": b"iksde", "password": b"iksde2"}
+
+
+def get_current_username(
+    credentials: Annotated[HTTPBasicCredentials, Depends(security)]
+):
+    current_username_bytes = credentials.username.encode("utf8")
+    is_correct_username = secrets.compare_digest(current_username_bytes, auth["login"])
+    current_password_bytes = credentials.password.encode("utf8")
+    is_correct_password = secrets.compare_digest(
+        current_password_bytes, auth["password"]
+    )
+    if not (is_correct_username and is_correct_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
 
 
 @app.get("/")
@@ -44,7 +69,8 @@ async def receive_sms(sms: SMS, auth: Auth):
 
 
 @app.get("/sms")
-async def list_sms():
+async def list_sms(username: Annotated[str, Depends(get_current_username)]):
+    print(username)
     sms = get_all_sms(Session)
 
     return {"smsList": sms}
