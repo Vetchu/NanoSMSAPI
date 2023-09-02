@@ -3,3 +3,4 @@ httpx
 sqlalchemy
 pytest
 uvicorn
+pytest-mock

@@ -14,7 +14,7 @@ Content-Type: application/json
 
 {
   "sms": {
-    "sender": "hihiks",
+    "sender": "ja",
     "message": "content"
   },
   "auth": "oof"
